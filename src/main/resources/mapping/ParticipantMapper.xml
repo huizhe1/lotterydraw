@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="xyz.huizhe.lotterydraw.mapper.ParticipantMapper">
+  <resultMap id="BaseResultMap" type="xyz.huizhe.lotterydraw.vo.Participant">
+    <constructor>
+      <idArg column="participants_id" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="activity_id" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="username" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="phone" javaType="java.lang.String" jdbcType="CHAR" />
+      <arg column="type" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="nickname" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="avatar_url" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="create_at" javaType="java.util.Date" jdbcType="DATE" />
+      <arg column="update_at" javaType="java.util.Date" jdbcType="DATE" />
+    </constructor>
+  </resultMap>
+  <sql id="Base_Column_List">
+    participants_id, activity_id, username, phone, type, nickname, avatar_url, create_at, 
+    update_at
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from participant
+    where participants_id = #{participantsId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from participant
+    where participants_id = #{participantsId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="xyz.huizhe.lotterydraw.vo.Participant">
+    insert into participant (participants_id, activity_id, username, 
+      phone, type, nickname, 
+      avatar_url, create_at, update_at
+      )
+    values (#{participantsId,jdbcType=INTEGER}, #{activityId,jdbcType=INTEGER}, #{username,jdbcType=VARCHAR}, 
+      #{phone,jdbcType=CHAR}, #{type,jdbcType=VARCHAR}, #{nickname,jdbcType=VARCHAR}, 
+      #{avatarUrl,jdbcType=VARCHAR}, now(), now()
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="xyz.huizhe.lotterydraw.vo.Participant">
+    insert into participant
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="participantsId != null">
+        participants_id,
+      </if>
+      <if test="activityId != null">
+        activity_id,
+      </if>
+      <if test="username != null">
+        username,
+      </if>
+      <if test="phone != null">
+        phone,
+      </if>
+      <if test="type != null">
+        type,
+      </if>
+      <if test="nickname != null">
+        nickname,
+      </if>
+      <if test="avatarUrl != null">
+        avatar_url,
+      </if>
+        create_at,
+        update_at,
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="participantsId != null">
+        #{participantsId,jdbcType=INTEGER},
+      </if>
+      <if test="activityId != null">
+        #{activityId,jdbcType=INTEGER},
+      </if>
+      <if test="username != null">
+        #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null">
+        #{phone,jdbcType=CHAR},
+      </if>
+      <if test="type != null">
+        #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="nickname != null">
+        #{nickname,jdbcType=VARCHAR},
+      </if>
+      <if test="avatarUrl != null">
+        #{avatarUrl,jdbcType=VARCHAR},
+      </if>
+      now(), now()
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="xyz.huizhe.lotterydraw.vo.Participant">
+    update participant
+    <set>
+      <if test="activityId != null">
+        activity_id = #{activityId,jdbcType=INTEGER},
+      </if>
+      <if test="username != null">
+        username = #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null">
+        phone = #{phone,jdbcType=CHAR},
+      </if>
+      <if test="type != null">
+        type = #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="nickname != null">
+        nickname = #{nickname,jdbcType=VARCHAR},
+      </if>
+      <if test="avatarUrl != null">
+        avatar_url = #{avatarUrl,jdbcType=VARCHAR},
+      </if>
+      update_at = now()
+    </set>
+    where participants_id = #{participantsId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="xyz.huizhe.lotterydraw.vo.Participant">
+    update participant
+    set activity_id = #{activityId,jdbcType=INTEGER},
+      username = #{username,jdbcType=VARCHAR},
+      phone = #{phone,jdbcType=CHAR},
+      type = #{type,jdbcType=VARCHAR},
+      nickname = #{nickname,jdbcType=VARCHAR},
+      avatar_url = #{avatarUrl,jdbcType=VARCHAR},
+      update_at = now()
+    where participants_id = #{participantsId,jdbcType=INTEGER}
+  </update>
+
+  <select id="getTheLast" resultType="int">
+    select
+    participants_id
+    from participant
+    order by update_at desc
+    limit 1
+  </select>
+
+  <select id="getAll" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from participant
+    order by update_at desc
+  </select>
+
+  <select id="getAllByActivityId" parameterType="int" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from participant
+    where activity_id = #{activityId}
+    order by update_at desc
+  </select>
+</mapper>

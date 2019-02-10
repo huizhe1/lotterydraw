@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="xyz.huizhe.lotterydraw.mapper.ActivityMapper">
+  <resultMap id="BaseResultMap" type="xyz.huizhe.lotterydraw.vo.Activity">
+    <constructor>
+      <idArg column="activity_id" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="activity_name" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="type" javaType="java.lang.Short" jdbcType="SMALLINT" />
+      <arg column="create_at" javaType="java.util.Date" jdbcType="DATE" />
+      <arg column="update_at" javaType="java.util.Date" jdbcType="DATE" />
+      <arg column="draw_at" javaType="java.util.Date" jdbcType="DATE" />
+    </constructor>
+  </resultMap>
+  <sql id="Base_Column_List">
+    activity_id, activity_name, type, create_at, update_at, draw_at
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from activity
+    where activity_id = #{activityId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from activity
+    where activity_id = #{activityId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="xyz.huizhe.lotterydraw.vo.Activity">
+    insert into activity (activity_id, activity_name, type, 
+      create_at, update_at, draw_at)
+    values (#{activityId,jdbcType=INTEGER}, #{activityName,jdbcType=VARCHAR}, #{type,jdbcType=SMALLINT}, 
+      now(), now(), #{drawAt,jdbcType=DATE})
+  </insert>
+  <insert id="insertSelective" parameterType="xyz.huizhe.lotterydraw.vo.Activity">
+    insert into activity
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="activityId != null">
+        activity_id,
+      </if>
+      <if test="activityName != null">
+        activity_name,
+      </if>
+      <if test="type != null">
+        type,
+      </if>
+        create_at,
+        update_at,
+      <if test="drawAt != null">
+        draw_at,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="activityId != null">
+        #{activityId,jdbcType=INTEGER},
+      </if>
+      <if test="activityName != null">
+        #{activityName,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        #{type,jdbcType=SMALLINT},
+      </if>
+      now(), now(),
+      <if test="drawAt != null">
+        #{drawAt,jdbcType=DATE},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="xyz.huizhe.lotterydraw.vo.Activity">
+    update activity
+    <set>
+      <if test="activityName != null">
+        activity_name = #{activityName,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        type = #{type,jdbcType=SMALLINT},
+      </if>
+      update_at = now(),
+      <if test="drawAt != null">
+        draw_at = #{drawAt,jdbcType=DATE},
+      </if>
+    </set>
+    where activity_id = #{activityId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="xyz.huizhe.lotterydraw.vo.Activity">
+    update activity
+    set activity_name = #{activityName,jdbcType=VARCHAR},
+      type = #{type,jdbcType=SMALLINT},
+      update_at = now(),
+      draw_at = #{drawAt,jdbcType=DATE}
+    where activity_id = #{activityId,jdbcType=INTEGER}
+  </update>
+
+  <select id="getTheLast" resultType="int">
+    select
+    activity_id
+    from activity
+    order by update_at desc
+    limit 1
+  </select>
+
+  <select id="getAll" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from activity
+    order by update_at desc
+  </select>
+</mapper>

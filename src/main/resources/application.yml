@@ -1,0 +1,28 @@
+spring:
+  profiles:
+    active: dev
+  jackson:
+    time-zone: GMT+8
+    date-format: yyyy-MM-dd HH:mm:ss
+  messages:
+    encoding: UTF-8
+
+server:
+  servlet:
+    context-path: /
+  port: 8083
+  tomcat:
+    uri-encoding: UTF-8
+
+mybatis:
+  type-aliases-package: xyz.huizhe.lotterydraw.vo
+  mapper-locations: classpath:mapping/*.xml
+
+pagehelper:
+  helper-dialect: mysql
+  reasonable: true
+  support-methods-arguments: true
+  params: count=countSql
+
+
+
